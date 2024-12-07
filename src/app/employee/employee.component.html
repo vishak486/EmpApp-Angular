@@ -1,0 +1,150 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Employee Management</h2>
+
+    <!-- Filter and Add Button Row -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- Filter Dropdown -->
+        <div>
+            <label for="filterStatus" class="form-label me-2">Filter by Status:</label>
+            <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">
+                check
+            </button>
+            <div class="collapse" id="collapseExample">
+                <button class="btn btn-success" (click)="filterItems('All')">All</button>
+                <button class="btn btn-primary" (click)="filterItems('Active')">Active</button>
+                <button class="btn btn-danger" (click)="filterItems('Inactive')">Inactive</button>
+            </div>
+        </div>
+
+
+
+        <!-- Add Employee Button -->
+        <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+            + Add Employee
+        </button>
+    </div>
+
+    <!-- Employee List Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (allEmployee.length>0) {
+                @for (employee of allEmployee; track $index) {
+                <tr>
+                    <td>{{$index +1}}</td>
+                    <td>{{employee.username}}</td>
+                    <td>{{employee.age}}</td>
+                    <td>{{employee.email}}</td>
+                    <td>{{employee.status}}</td>
+                    <td>
+                        <button (click)="openEditModal(employee)" class="btn btn-warning btn-md" data-bs-toggle="modal"
+                            data-bs-target="#editEmployeeModal">
+                            Edit
+                        </button>
+                        <button (click)="deleteEmployee(employee.id)" class="btn btn-danger btn-md">Delete</button>
+                    </td>
+                </tr>
+                }
+                }
+                @else {
+                <div class="fw-bolder fs-5 my-5 text-danger">Employees Not Found!!!</div>
+                }
+
+                <!-- Repeat for other employees -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Employee Modal -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEmployeeModalLabel">Add New Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="addEmployeeForm" (ngSubmit)="addEmployee()">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" name="username" formControlName="username" class="form-control" id="username"
+                            placeholder="Enter username" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="age" class="form-label">Age</label>
+                        <input type="number" name="age" formControlName="age" class="form-control" id="age"
+                            placeholder="Enter age" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" name="email" formControlName="email" class="form-control" id="email"
+                            placeholder="Enter email" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select name="status" formControlName="status" class="form-select" id="status">
+                            <option selected disabled>Select status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <button type="submit" [disabled]="!addEmployeeForm.valid"
+                        class="btn btn-primary w-100">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Employee Modal -->
+<div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-labelledby="editEmployeeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEmployeeModalLabel">Edit Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="editEmployeeForm" (ngSubmit)="editEmployee()">
+                    <div class="mb-3">
+                        <label for="editUsername" class="form-label">Username</label>
+                        <input type="text" name="username" formControlName="username" class="form-control"
+                            id="editUsername" placeholder="Enter username" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editAge" class="form-label">Age</label>
+                        <input type="number" name="age" formControlName="age" class="form-control" id="editAge"
+                            placeholder="Enter age" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editEmail" class="form-label">Email</label>
+                        <input type="email" name="email" formControlName="email" class="form-control" id="editEmail"
+                            placeholder="Enter email" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editStatus" class="form-label">Status</label>
+                        <select name="status" formControlName="status" class="form-select" id="editStatus">
+                            <option selected disabled>Select status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
